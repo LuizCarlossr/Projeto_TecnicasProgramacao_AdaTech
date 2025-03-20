@@ -6,12 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final TaskRepositoryImpl INSTANCE = new TaskRepositoryImpl();
+    // Singleton: GoF grupo de engenheiros e arquitetos escreveram catalogo: Design Patterns: Boas praticas de desenvolvimento, eficiencia no teu software
     private final List<Task> tasks = new ArrayList<>();
+    // Estrutura de dados: Decisões feitas em DS (data structure) impactar profundamente o desempenho da aplicação
+
+    // Pesquisa
+    // Ordenação
+
+    //Array: ArrayList uma classe no Java que facilita o uso de array: Array
+    // [t1,t2,t3,t4,t5,t6] array de tarefas. Econtre a tarefa com id = 4
+
+    //Tabela Hash: HashMap que facilita o uso de tabela hash
+    //{[102, t1], [645, t2], [12, t3], [765, t4] [56, t5]}
+
+    // array.length = N = 100_000_000
+    // esforço = N O(n)
+    // BigO Notation: DSA: Data Structures and Algorithm (search and order)
+    // Divide to conquer: Binary Search
+
+    //ArrayList e HashMap: Qual seria ideal para armazenar em memoria objetos que possuem um identificador unico.
+
     private static Long idCounter = 1L;
 
     private TaskRepositoryImpl() {
@@ -26,7 +44,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task save(Task task) {
         if (task.getId() == null) {
             // Criando um novo ID para a tarefa
-            task.setId(idCounter++);
+            task.setId(getIncrementalId());
             tasks.add(task);
         } else {
             // Buscando a tarefa existente para atualização. Pare e pense se essa abordagem tem bom desempenho. FindById vai percorrer toda a lista para encontrar match e filtrar. Como poderíamos fazer uma busca mais eficiente? Considere usar outra estrutura de dados para além do array
@@ -43,6 +61,10 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
         }
         return task;
+    }
+
+    private static Long getIncrementalId() {
+        return idCounter++;
     }
 
     @Override
